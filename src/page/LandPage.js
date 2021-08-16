@@ -16,15 +16,15 @@ function LandPage({ user, setUser }) {
   const handleClose = () => setShow(false);
 
   const [matches, setMatches] = useState([]);
-    // fetch matches
-    useEffect(() => {
-      async function fetchMatches() {
-        const matchService = new MatchService();
-        const matches = await matchService.list();
-        setMatches(matches)
-      }
-      fetchMatches();
-    }, [user]);
+  // fetch matches
+  useEffect(() => {
+    async function fetchMatches() {
+      const matchService = new MatchService();
+      const matches = await matchService.list();
+      setMatches(matches);
+    }
+    fetchMatches();
+  }, [user]);
 
   const handleShow = (formType) => {
     setFormType(formType);
@@ -34,27 +34,28 @@ function LandPage({ user, setUser }) {
   const isUserLogged = user?.id !== undefined;
 
   const handleLogin = (user) => {
-    console.log('user: ', user);
     setUser(user);
     handleClose();
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    setUser({})
+    setUser({});
   };
 
   return (
     <Container>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>{formType === "signIn" ? "Sign In" : "Sign Up"}</Modal.Title>
+          <Modal.Title>
+            {formType === "signIn" ? "Sign In" : "Sign Up"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {formType === "signIn" ? (
-            <SignInForm handleLogin={handleLogin} />
+            <SignInForm handleLogin={handleLogin} setFormType={setFormType} />
           ) : (
-            <SignUpForm handleLogin={handleLogin} />
+            <SignUpForm handleLogin={handleLogin} setFormType={setFormType} />
           )}
         </Modal.Body>
       </Modal>

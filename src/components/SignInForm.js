@@ -32,13 +32,16 @@ function SignForm(props) {
       .then((resp) => resp.json())
       .then((data) => {
         // TODO: if data.failure exists, it should show an error message
-        console.log('data: ', data);
         localStorage.setItem("token", data.jwt);
         props.handleLogin(data.user);
       });
 
     setUsername("");
     setPassword("");
+  };
+
+  const handleToggleForm = () => {
+    props.setFormType("signUp");
   };
 
   return (
@@ -63,9 +66,14 @@ function SignForm(props) {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Sign In
-      </Button>
+      <div className="d-flex justify-content-between">
+        <Button variant="link" onClick={handleToggleForm}>
+          Sign Up
+        </Button>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Sign In
+        </Button>
+      </div>
     </Form>
   );
 }

@@ -39,6 +39,10 @@ function SignForm(props) {
     setPassword("");
   };
 
+  const handleToggleForm = () => {
+    props.setFormType("signIn");
+  };
+
   return (
     <Form>
       <Form.Group controlId="formBasicEmail">
@@ -61,13 +65,14 @@ function SignForm(props) {
         />
       </Form.Group>
 
-      <Button
-        variant="primary"
-        type="submit"
-        onClick={handleSubmit}
-      >
-        Sign Up
-      </Button>
+      <div className="d-flex justify-content-between">
+        <Button variant="link" onClick={handleToggleForm}>
+          Sign In
+        </Button>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Sign Up
+        </Button>
+      </div>
     </Form>
   );
 }
