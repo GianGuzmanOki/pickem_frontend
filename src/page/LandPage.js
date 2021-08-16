@@ -1,26 +1,34 @@
-import {Button, Container, Row, Col, Card, Modal} from "react-bootstrap";
+import { Button, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
 import MatchService from "../services/MatchService";
 import PickService from "../services/PickService";
+import Paginate from "../components/Paginate";
 
 function LandPage({ user, setUser }) {
+  // ui
   const [show, setShow] = useState(false);
   const [formType, setFormType] = useState("signIn");
-  const handleClose = () => setShow(false);
 
-  const [matches, setMatches] = useState([]);
+  // pagination
+  const [data, setData] = useState();
+
   // fetch matches
+  const [matches, setMatches] = useState([]);
   useEffect(() => {
     async function fetchMatches() {
       const matchService = new MatchService();
-      const matches = await matchService.list();
+      const data = await matchService.list({ page: 1 });
+      setData(data);
+      const { matches } = data;
       setMatches(matches);
     }
     fetchMatches();
   }, [user]);
+
+  const handleClose = () => setShow(false);
 
   const handleShow = (formType) => {
     setFormType(formType);
@@ -51,6 +59,14 @@ function LandPage({ user, setUser }) {
       });
       alert(pickResponse.message);
     }
+  };
+
+  const handlePageChange = async (pageSelected) => {
+    const matchService = new MatchService();
+    const data = await matchService.list({ page: pageSelected });
+    setData(data);
+    const { matches } = data;
+    setMatches(matches);
   };
 
   return (
@@ -115,6 +131,17 @@ function LandPage({ user, setUser }) {
             </Card>
           </Col>
         ))}
+      </Row>
+      <Row>
+        <Col>
+          {data ? (
+            <Paginate
+              defaultActivePage={1}
+              totalPages={data.meta.total_pages}
+              onPageChange={handlePageChange}
+            />
+          ) : null}
+        </Col>
       </Row>
     </Container>
   );

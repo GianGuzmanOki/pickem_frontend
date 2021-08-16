@@ -7,8 +7,8 @@ function MatchService() {
   return MatchService.instance;
 }
 
-MatchService.prototype.list = () =>
-  apiFetch(`${BASE_URL}/matches`, {
+MatchService.prototype.list = ({page}) =>
+  apiFetch(`${BASE_URL}/matches?page=${page}`, {
     method: "GET",
   });
 

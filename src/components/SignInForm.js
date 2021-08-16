@@ -19,7 +19,6 @@ function SignForm(props) {
     e.preventDefault();
 
     fetch(`${BASE_URL}/login`, {
-      // TODO: change to env variable
       method: "POST",
       headers: {
         "Content-Type": "application/json",
