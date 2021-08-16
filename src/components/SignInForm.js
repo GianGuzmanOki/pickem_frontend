@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { BASE_URL } from "../services/api_fetch";
 
 function SignForm(props) {
   const [username, setUsername] = useState("");
@@ -17,7 +18,7 @@ function SignForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/api/v1/login`, {
+    fetch(`${BASE_URL}/login`, {
       // TODO: change to env variable
       method: "POST",
       headers: {

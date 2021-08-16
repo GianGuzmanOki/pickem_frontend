@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LandPage from "./page/LandPage";
 import Profile from "./page/Profile";
 import PrivateRoute from "./utils/PrivateRoute";
+import { BASE_URL } from "./services/api_fetch";
 
 export default function App() {
   const [user, setUser] = useState({});
@@ -12,7 +13,7 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch(`http://localhost:3000/api/v1/auto_login`, {
+      fetch(`${BASE_URL}/auto_login`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

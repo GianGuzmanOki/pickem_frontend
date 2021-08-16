@@ -1,14 +1,10 @@
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Modal from "react-bootstrap/Modal";
+import {Button, Container, Row, Col, Card, Modal} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
 import MatchService from "../services/MatchService";
+import PickService from "../services/PickService";
 
 function LandPage({ user, setUser }) {
   const [show, setShow] = useState(false);
@@ -41,6 +37,20 @@ function LandPage({ user, setUser }) {
   const logout = () => {
     localStorage.removeItem("token");
     setUser({});
+  };
+
+  const handlePick = async (matchQuestionId, teamId) => {
+    if (!isUserLogged) {
+      setFormType("signIn");
+      setShow(true);
+    } else {
+      const pickService = new PickService();
+      const pickResponse = await pickService.create({
+        match_question_id: matchQuestionId,
+        team_id: teamId,
+      });
+      alert(pickResponse.message);
+    }
   };
 
   return (
@@ -90,9 +100,17 @@ function LandPage({ user, setUser }) {
           <Col key={index} xs={6} className="mb-3">
             <Card>
               <Card.Body className="mx-auto">
-                <Button>{match.home_team}</Button>
+                <Button
+                  onClick={() => handlePick(match.default_question_value, match.home_team_id)}
+                >
+                  {match.home_team}
+                </Button>
                 <span className="mx-5">vs</span>
-                <Button>{match.away_team}</Button>
+                <Button
+                  onClick={() => handlePick(match.default_question_value, match.away_team_id)}
+                >
+                  {match.away_team}
+                </Button>
               </Card.Body>
             </Card>
           </Col>

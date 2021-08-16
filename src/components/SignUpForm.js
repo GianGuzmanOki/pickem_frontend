@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { BASE_URL } from "../services/api_fetch";
 
 function SignForm(props) {
   const [username, setUsername] = useState("");
@@ -17,7 +18,7 @@ function SignForm(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://localhost:3000/api/v1/users`, {
+    fetch(`${BASE_URL}/users`, {
       // TODO: change to env variable
       method: "POST",
       headers: {
@@ -31,6 +32,7 @@ function SignForm(props) {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        // TODO: if data.failure exists, it should show an error message
         localStorage.setItem("token", data.jwt);
         props.handleLogin(data.user);
       });
