@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-function SignUpForm(props) {
+function SignForm(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,6 +16,7 @@ function SignUpForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     fetch(`http://localhost:3000/api/v1/users`, {
       // TODO: change to env variable
       method: "POST",
@@ -31,7 +32,7 @@ function SignUpForm(props) {
       .then((resp) => resp.json())
       .then((data) => {
         localStorage.setItem("token", data.jwt);
-        props.handleSignUp(data.user);
+        props.handleLogin(data.user);
       });
 
     setUsername("");
@@ -60,11 +61,15 @@ function SignUpForm(props) {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" onClick={handleSubmit}>
-        Sign up
+      <Button
+        variant="primary"
+        type="submit"
+        onClick={handleSubmit}
+      >
+        Sign Up
       </Button>
     </Form>
   );
 }
 
-export default SignUpForm;
+export default SignForm;
