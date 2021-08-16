@@ -4,17 +4,27 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SignInForm from "../components/SignInForm";
 import SignUpForm from "../components/SignUpForm";
-
-import matches from "../constants/matches";
+import MatchService from "../services/MatchService";
 
 function LandPage({ user, setUser }) {
   const [show, setShow] = useState(false);
   const [formType, setFormType] = useState("signIn");
   const handleClose = () => setShow(false);
+
+  const [matches, setMatches] = useState([]);
+    // fetch matches
+    useEffect(() => {
+      async function fetchMatches() {
+        const matchService = new MatchService();
+        const matches = await matchService.list();
+        setMatches(matches)
+      }
+      fetchMatches();
+    }, [user]);
 
   const handleShow = (formType) => {
     setFormType(formType);
@@ -79,8 +89,9 @@ function LandPage({ user, setUser }) {
           <Col key={index} xs={6} className="mb-3">
             <Card>
               <Card.Body className="mx-auto">
-                <Button className="mr-5">{match.team1}</Button>
-                <Button>{match.team2}</Button>
+                <Button>{match.home_team}</Button>
+                <span className="mx-5">vs</span>
+                <Button>{match.away_team}</Button>
               </Card.Body>
             </Card>
           </Col>
